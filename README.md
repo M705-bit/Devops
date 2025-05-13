@@ -1,5 +1,8 @@
-#explicar o que ssh
-#explicar o comando last
-#explicar o que eé docker 
-#explicar o que é um dockerfile
-#explicar o funciinamento do meu script
+Esse código utiliza a linguagem Bash e a linguagem de programação interpretada, AWK. O objetivo desse script é utilizar o comando last, que é um comando do Linux que lê as informações do arquivo /var/log/wtmp21 e exibi informações sobre as últimas sessões de login dos usuários do sistema, para identificar quais hosts acessaram a máquina via ssh no dia anterior. 
+Explicando o código: 
+Na primeira linha delimitamos a quantidade de acessos que o comando last irá apresentar, ao delimitarmos o tempo. Utilizamos pipeline para exibir outro comando, agora estamos extraindo o terceiro campo de cada linha, que normalmente é o nome de usuário no comando last. Depois utilizamos os comandos sort, para poder ordenar os IPs,  por ordem numérica e depois o unic -c, para contar quantas vezes cada IP aparece. 
+Usamos o comando ‘find’ para localizar o caminho do arquivo ‘saida_padrao.txt” para termos certeza de que não vamos perdê-lo nos nossos diretórios. 
+Já a sintaxe abaixo, lê o arquivo de saída e encontra o maior número na primeira coluna (que do jeito que eu construí o arquivo saida_padrão) seria a quantidade de acessos. Uso awk para comparar e guardar o maior valor e passá-lo para a variável MAX.
+MAX=$(awk 'BEGIN { max = -inf }{ if ($1>max) max = $1} END { print max}' "$VAR")
+A última sintaxe: lê novamente o arquivo saida_padrao e localiza a linha que corresponde ao valor de MAX, pois na próxima coluna haverá o número do IP. Vale lembrar que a opção -v permite que você passe uma variável da linha de comando para um script AWK.
+awk -v max="$MAX" '$1 == max { print "Parabéns " $2 ", você é o usuário que mais acessou esta VM via ssh, foram um total de " $1 " vezes!" }' "$VAR"
